@@ -1,6 +1,7 @@
 # Import required libraries
 import pandas as pd
 import dash
+import numpy as np
 import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output
@@ -66,8 +67,9 @@ def get_pie_chart(entered_site):
     else:
         # return the outcomes piechart for a selected site
         filtered_df = spacex_df[spacex_df["Launch Site"] == entered_site]
-        fix = px.pie(filtered_df, values = 'class',
-        names = 'Launch Site',
+        vals = np.ones(len(filtered_df['class']))
+        fig = px.pie(filtered_df, values = vals,
+        names = 'class',
         title = 'Total Success Launches for site ' + entered_site)
         return fig
 
@@ -87,6 +89,7 @@ def get_scatter_chart(entered_site, range):
         filtered_df = spacex_df[spacex_df["Launch Site"] == entered_site]
         fig = px.scatter(filtered_df, x = 'Payload Mass (kg)', y = 'class', color = 'Booster Version Category',
         title = 'Correlation between Payload and Success for ' + entered_site, range_x = [range[0], range[1]])
+        return fig
 
 # Run the app
 if __name__ == '__main__':
